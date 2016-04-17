@@ -10102,7 +10102,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/App.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(11)
+	__vue_template__ = __webpack_require__(13)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -10456,10 +10456,18 @@
 
 	var _upload2 = _interopRequireDefault(_upload);
 
+	var _patse = __webpack_require__(11);
+
+	var _patse2 = _interopRequireDefault(_patse);
+
+	var _form = __webpack_require__(12);
+
+	var _form2 = _interopRequireDefault(_form);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
-	  mixins: [_dragDrop2.default, _upload2.default],
+	  mixins: [_dragDrop2.default, _upload2.default, _patse2.default, _form2.default],
 	  data: function data() {
 	    return {
 	      text: '',
@@ -10472,29 +10480,13 @@
 	  filters: {},
 	  ready: function ready() {},
 	  methods: {
-	    handleTPaste: function handleTPaste(event) {
-	      var _this = this;
-
-	      var image;
-	      var pasteEvent = event;
-	      if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
-	        image = isImage(pasteEvent.clipboardData.items);
-	        if (image) {
-	          event.preventDefault();
-	          var file = image.getAsFile();
-	          file.name = getFilename(event) || 'image-' + Date.now() + '.png';
-	          return this.fileUpload(file, function (err, data) {
-	            _this.uploadComplete(err, data);
-	          });
-	        }
-	      }
-	    },
 	    handleTFocus: function handleTFocus(e) {
 	      this.isFocus = true;
 	    },
 	    handleTBlur: function handleTBlur(e) {
 	      this.isFocus = false;
 	    },
+	    uploading: function uploading() {},
 	    uploadComplete: function uploadComplete(err, data) {
 	      if (err) {
 	        return;
@@ -10503,42 +10495,9 @@
 	        url: data.url
 	      });
 	      this.text += '![image]($src)'.replace('$src', data.url);
-	    },
-	    fileInputClick: function fileInputClick(e) {
-	      console.log('fileInputClick', e);
-	    },
-	    fileInputChange: function fileInputChange(e) {
-	      var myFiles = e.target.files;
-
-	      console.log('fileInputChange', myFiles, e);
 	    }
 	  }
 	};
-
-
-	function isImage(items) {
-	  var i = 0;
-	  var item;
-	  while (i < items.length) {
-	    item = items[i];
-	    if (item.type.indexOf('image') !== -1) {
-	      return item;
-	    }
-	    i++;
-	  }
-	  return false;
-	}
-
-	function getFilename(e) {
-	  var value;
-	  if (window.clipboardData && window.clipboardData.getData) {
-	    value = window.clipboardData.getData('Text');
-	  } else if (e.clipboardData && e.clipboardData.getData) {
-	    value = e.clipboardData.getData('text/plain');
-	  }
-	  value = value.split('\r');
-	  return value.first();
-	}
 
 /***/ },
 /* 9 */
@@ -10660,6 +10619,83 @@
 
 /***/ },
 /* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  methods: {
+	    handleTPaste: function handleTPaste(event) {
+	      var _this = this;
+
+	      var image;
+	      if (event.clipboardData && event.clipboardData.items) {
+	        image = isImage(event.clipboardData.items);
+	        if (image) {
+	          event.preventDefault();
+	          var file = image.getAsFile();
+	          file.name = getFilename(event) || 'image-' + Date.now() + '.png';
+	          return this.fileUpload(file, function (err, data) {
+	            _this.uploadComplete(err, data);
+	          });
+	        }
+	      }
+	    }
+	  }
+	};
+
+
+	function isImage(items) {
+	  var i = 0;
+	  var item;
+	  while (i < items.length) {
+	    item = items[i];
+	    if (item.type.indexOf('image') !== -1) {
+	      return item;
+	    }
+	    i++;
+	  }
+	  return false;
+	}
+
+	function getFilename(e) {
+	  var value;
+	  if (window.clipboardData && window.clipboardData.getData) {
+	    value = window.clipboardData.getData('Text');
+	  } else if (e.clipboardData && e.clipboardData.getData) {
+	    value = e.clipboardData.getData('text/plain');
+	  }
+	  value = value.split('\r');
+	  return value.first();
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  methods: {
+	    fileInputClick: function fileInputClick(e) {
+	      console.log('fileInputClick', e);
+	    },
+	    fileInputChange: function fileInputChange(e) {
+	      var myFiles = e.target.files;
+
+	      console.log('fileInputChange', myFiles, e);
+	    }
+	  }
+	};
+
+/***/ },
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div id=\"app\">\n  <div class=\"write-content\"\n      @drop=\"handleDrag\"  \n      @dragover=\"handleDragover\"\n      @dragleave=\"handleDragleave\"\n      :class=\"{focused:isFocus, dragoverd: isDrogover}\">\n    <textarea \n      @paste=\"handleTPaste\" \n      @focus=\"handleTFocus\"\n      @blur=\"handleTBlur\"\n      v-model=\"text\"\n      placeholder=\"Write a comment or drag your files here...\"></textarea>  \n      <p class=\"drag-and-drop\">\n        <span class=\"default\">\n          Attach files by dragging &amp; dropping,\n          <input type=\"file\" multiple=\"multiple\" \n            class=\"manual-file-chooser js-manual-file-chooser\"\n            @click=\"fileInputClick\"\n            @change=\"fileInputChange\">\n          <button class=\"btn-link manual-file-chooser-text\">selecting them</button>, or pasting\n          from the clipboard.\n        </span>\n        <span class=\"loading\">\n          Uploading your files…\n        </span>\n      </p>\n  </div>\n  \n  <ul>\n    <li v-for=\"img in images\">\n      <img v-bind:src=\"img.url\">    \n    </li>\n  </ul>\n  \n</div>\n";

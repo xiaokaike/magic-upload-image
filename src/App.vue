@@ -39,9 +39,11 @@
 <script>
 import mixinDragDrop from './mixin/drag-drop'
 import mixinUpload from './mixin/upload'
+import mixinPatse from './mixin/patse'
+import mixinForm from './mixin/form'
 
 export default {
-  mixins: [mixinDragDrop, mixinUpload],
+  mixins: [mixinDragDrop, mixinUpload, mixinPatse, mixinForm],
   data () {
     return {
       text: '',
@@ -55,26 +57,14 @@ export default {
   ready: function () {
   },
   methods: {
-    handleTPaste (event) {
-      var image
-      var pasteEvent = event
-      if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
-        image = isImage(pasteEvent.clipboardData.items)
-        if (image) {
-          event.preventDefault()
-          var file = image.getAsFile()
-          file.name = getFilename(event) || 'image-' + Date.now() + '.png'
-          return this.fileUpload(file, (err, data) => {
-            this.uploadComplete(err, data)
-          })
-        }
-      }
-    },
     handleTFocus (e) {
       this.isFocus = true
     },
     handleTBlur (e) {
       this.isFocus = false
+    },
+    uploading () {
+
     },
     uploadComplete (err, data) {
       if (err) {
@@ -84,40 +74,8 @@ export default {
         url: data.url
       })
       this.text += '![image]($src)'.replace('$src', data.url)
-    },
-    fileInputClick (e) {
-      console.log('fileInputClick', e)
-    },
-    fileInputChange (e) {
-      var myFiles = e.target.files
-      // this.fileUpload(myFiles)
-      console.log('fileInputChange', myFiles, e)
     }
   }
-}
-
-function isImage (items) {
-  var i = 0
-  var item
-  while (i < items.length) {
-    item = items[i]
-    if (item.type.indexOf('image') !== -1) {
-      return item
-    }
-    i++
-  }
-  return false
-}
-
-function getFilename (e) {
-  var value
-  if (window.clipboardData && window.clipboardData.getData) {
-    value = window.clipboardData.getData('Text')
-  } else if (e.clipboardData && e.clipboardData.getData) {
-    value = e.clipboardData.getData('text/plain')
-  }
-  value = value.split('\r')
-  return value.first()
 }
 
 </script>
