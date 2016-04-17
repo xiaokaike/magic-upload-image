@@ -33,9 +33,10 @@
 
 <script>
 import mixinDragDrop from './mixin/drag-drop'
+import mixinUpload from './mixin/upload'
 
 export default {
-  mixins: [mixinDragDrop],
+  mixins: [mixinDragDrop, mixinUpload],
   data () {
     return {
       text: '',
@@ -51,20 +52,15 @@ export default {
   methods: {
     handleTPaste: function (event) {
       var that = this
-      var filename
       var image
       var pasteEvent
-      var text
       pasteEvent = event
-
+      
       if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
-        image = isImage(pasteEvent)
+        image = isImage(pasteEvent.clipboardData.items)
         if (image) {
           event.preventDefault()
-          filename = getFilename(pasteEvent) || 'image-' + Date.now() + '.png'
-          text = '{{' + filename + '}}'
-          console.log(text)
-          return uploadFile(image.getAsFile(), filename, function (data) {
+          return this.fileUpload(image.getAsFile(), function (err, data) {
             console.log(data)
             that.uploadComplete(data)
           })
@@ -79,44 +75,31 @@ export default {
     },
     uploadComplete: function (data) {
       this.imageUrl = data.url
-      this.text = '![image]($src)'.replace('$src', data.url)
+      this.text += '![image]($src)'.replace('$src', data.url)
     },
     fileInputClick: function (e) {
       console.log('fileInputClick', e)
     },
     fileInputChange: function (e) {
       var myFiles = e.target.files
+      this.fileUpload(myFiles)
       console.log('fileInputChange', myFiles, e)
     }
   }
 }
 
-function isImage (data) {
-  var i, item
-  i = 0
-  while (i < data.clipboardData.items.length) {
-    item = data.clipboardData.items[i]
+function isImage (items) {
+  var i = 0 
+  var item
+
+  while (i < items.length) {
+    item = items[i]
     if (item.type.indexOf('image') !== -1) {
       return item
     }
     i++
   }
   return false
-}
-
-function uploadFile () {
-
-}
-
-function getFilename (e) {
-  var value
-  if (window.clipboardData && window.clipboardData.getData) {
-    value = window.clipboardData.getData('Text')
-  } else if (e.clipboardData && e.clipboardData.getData) {
-    value = e.clipboardData.getData('text/plain')
-  }
-  value = value.split('\r')
-  return value.first()
 }
 
 </script>

@@ -6,3 +6,4 @@ new Vue({
   el: 'body',
   components: { App }
 })
+
