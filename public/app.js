@@ -10108,7 +10108,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/Users/xiaokai/xeme/pro/magic-upload/src/App.vue"
+	  var id = "/Users/xiaokai/xeme/pro/magic-upload-image/src/App.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -10471,15 +10471,15 @@
 	    handleTPaste: function handleTPaste(event) {
 	      var that = this;
 	      var image;
-	      var pasteEvent;
-	      pasteEvent = event;
-
+	      var pasteEvent = event;
 	      if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
 	        image = isImage(pasteEvent.clipboardData.items);
 	        if (image) {
 	          event.preventDefault();
-	          return this.fileUpload(image.getAsFile(), function (err, data) {
-	            console.log(data);
+	          var file = image.getAsFile();
+	          file.filename = getFilename(event) || 'image-' + Date.now() + '.png';
+	          return this.fileUpload(file, function (err, data) {
+	            console.log(err, data);
 	            that.uploadComplete(data);
 	          });
 	        }
@@ -10500,7 +10500,7 @@
 	    },
 	    fileInputChange: function fileInputChange(e) {
 	      var myFiles = e.target.files;
-	      this.fileUpload(myFiles);
+
 	      console.log('fileInputChange', myFiles, e);
 	    }
 	  }
@@ -10510,7 +10510,6 @@
 	function isImage(items) {
 	  var i = 0;
 	  var item;
-
 	  while (i < items.length) {
 	    item = items[i];
 	    if (item.type.indexOf('image') !== -1) {
@@ -10519,6 +10518,17 @@
 	    i++;
 	  }
 	  return false;
+	}
+
+	function getFilename(e) {
+	  var value;
+	  if (window.clipboardData && window.clipboardData.getData) {
+	    value = window.clipboardData.getData('Text');
+	  } else if (e.clipboardData && e.clipboardData.getData) {
+	    value = e.clipboardData.getData('text/plain');
+	  }
+	  value = value.split('\r');
+	  return value.first();
 	}
 
 /***/ },
@@ -10625,17 +10635,16 @@
 	  },
 
 	  methods: {
-	    fileUpload: function fileUpload(myFiles, type) {
-	      myFiles.filename = myFiles.filename || 'image-' + Date.now() + '.png';
+	    fileUpload: function fileUpload(myFiles, callback) {
 	      return this._handleUpload(myFiles, function (err, data) {
 	        console.log(err, data);
+	        callback(err, data);
 	      });
 	    },
 	    _handleUpload: function _handleUpload(file, callback) {
 	      var form = new win.FormData();
 	      var xhr = new win.XMLHttpRequest();
 	      this.$dispatch('beforeFileUpload', file);
-
 	      try {
 	        form.append('file', file, file.filename);
 	      } catch (err) {
@@ -10650,7 +10659,7 @@
 	        if (xhr.status < 400) {
 	          var res = JSON.parse(xhr.responseText);
 	          this.$dispatch('onFileUpload', file, res);
-	          callback(null, file);
+	          callback(null, res);
 	        } else {
 	          var err = JSON.parse(xhr.responseText);
 	          err.status = xhr.status;
@@ -10670,7 +10679,6 @@
 
 	      xhr.open('POST', this.action, true);
 	      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
 	      if (this.headers) {
 	        for (var header in this.headers) {
 	          xhr.setRequestHeader(header, this.headers[header]);
@@ -10681,18 +10689,6 @@
 	    }
 	  }
 	};
-
-
-	function getFilename(e) {
-	  var value;
-	  if (window.clipboardData && window.clipboardData.getData) {
-	    value = window.clipboardData.getData('Text');
-	  } else if (e.clipboardData && e.clipboardData.getData) {
-	    value = e.clipboardData.getData('text/plain');
-	  }
-	  value = value.split('\r');
-	  return value.first();
-	}
 
 /***/ },
 /* 12 */

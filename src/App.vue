@@ -50,48 +50,47 @@ export default {
   ready: function () {
   },
   methods: {
-    handleTPaste: function (event) {
+    handleTPaste (event) {
       var that = this
       var image
-      var pasteEvent
-      pasteEvent = event
-      
+      var pasteEvent = event
       if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
         image = isImage(pasteEvent.clipboardData.items)
         if (image) {
           event.preventDefault()
-          return this.fileUpload(image.getAsFile(), function (err, data) {
-            console.log(data)
+          var file = image.getAsFile()
+          file.filename = getFilename(event) || 'image-' + Date.now() + '.png'
+          return this.fileUpload(file, function (err, data) {
+            console.log(err, data)
             that.uploadComplete(data)
           })
         }
       }
     },
-    handleTFocus: function (e) {
+    handleTFocus (e) {
       this.isFocus = true
     },
-    handleTBlur: function (e) {
+    handleTBlur (e) {
       this.isFocus = false
     },
-    uploadComplete: function (data) {
+    uploadComplete (data) {
       this.imageUrl = data.url
       this.text += '![image]($src)'.replace('$src', data.url)
     },
-    fileInputClick: function (e) {
+    fileInputClick (e) {
       console.log('fileInputClick', e)
     },
-    fileInputChange: function (e) {
+    fileInputChange (e) {
       var myFiles = e.target.files
-      this.fileUpload(myFiles)
+      // this.fileUpload(myFiles)
       console.log('fileInputChange', myFiles, e)
     }
   }
 }
 
 function isImage (items) {
-  var i = 0 
+  var i = 0
   var item
-
   while (i < items.length) {
     item = items[i]
     if (item.type.indexOf('image') !== -1) {
@@ -100,6 +99,17 @@ function isImage (items) {
     i++
   }
   return false
+}
+
+function getFilename (e) {
+  var value
+  if (window.clipboardData && window.clipboardData.getData) {
+    value = window.clipboardData.getData('Text')
+  } else if (e.clipboardData && e.clipboardData.getData) {
+    value = e.clipboardData.getData('text/plain')
+  }
+  value = value.split('\r')
+  return value.first()
 }
 
 </script>

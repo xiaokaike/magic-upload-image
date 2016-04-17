@@ -9,19 +9,16 @@ export default {
     }
   },
   methods: {
-    fileUpload (myFiles, type) {
-      myFiles.filename = myFiles.filename || 'image-' + Date.now() + '.png'
+    fileUpload (myFiles, callback) {
       return this._handleUpload(myFiles, function (err, data) {
         console.log(err, data)
+        callback(err, data)
       })
-
-      
     },
     _handleUpload (file, callback) {
       var form = new win.FormData()
       var xhr = new win.XMLHttpRequest()
       this.$dispatch('beforeFileUpload', file)
-      
       try {
         // form.append('Content-Type', file.type || 'application/octet-stream')
         // our request will have the file in the ['file'] key
@@ -33,7 +30,6 @@ export default {
 
       // xhr.upload.addEventListener('progress', this._onProgress, false)
 
-
       xhr.onreadystatechange = function () {
         if (xhr.readyState < 4) {
           return
@@ -41,7 +37,7 @@ export default {
         if (xhr.status < 400) {
           var res = JSON.parse(xhr.responseText)
           this.$dispatch('onFileUpload', file, res)
-          callback(null, file)
+          callback(null, res)
         } else {
           var err = JSON.parse(xhr.responseText)
           err.status = xhr.status
@@ -59,10 +55,8 @@ export default {
         callback(err)
       }.bind(this)
 
-      
       xhr.open('POST', this.action, true)
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-      
       if (this.headers) {
         for (var header in this.headers) {
           xhr.setRequestHeader(header, this.headers[header])
@@ -72,15 +66,4 @@ export default {
       this.$dispatch('afterFileUpload', file)
     }
   }
-}
-
-function getFilename (e) {
-  var value
-  if (window.clipboardData && window.clipboardData.getData) {
-    value = window.clipboardData.getData('Text')
-  } else if (e.clipboardData && e.clipboardData.getData) {
-    value = e.clipboardData.getData('text/plain')
-  }
-  value = value.split('\r')
-  return value.first()
 }
