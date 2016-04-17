@@ -10155,7 +10155,7 @@
 
 
 	// module
-	exports.push([module.id, "\n*{\n  box-sizing: border-box;\n}\n.write-content {\n  position: relative;\n  width: 600px;\n  margin: 0 auto;\n}\n.write-content textarea {\n  width: 100%;\n  min-height: 200px;\n  max-height: 500px;\n  padding: 10px;\n  resize: vertical;\n  display: block;\n  border: 1px solid #ddd;\n  border-bottom: 1px dashed #ddd;\n  font-size: 14px;\n  line-height: 1.6;\n  background-color: #fafafa;\n  border-radius: 3px 3px 0 0;\n  outline: none;\n  box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);\n}\n.write-content textarea:focus{\n  background-color: #fff;\n  border-color: #51a7e8;\n  outline: none;\n  box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);\n}\n.write-content.focused .drag-and-drop{\n  border-color: #51a7e8;\n  box-shadow: rgba(81,167,232,0.5) 0 0 3px;\n}\n.dragoverd textarea, \n.dragoverd .drag-and-drop {\n    box-shadow: #c9ff00 0 0 3px;\n}\n.drag-and-drop{\n  padding: 7px 10px;\n  margin: 0;\n  font-size: 13px;\n  line-height: 16px;\n  color: #767676;\n  background-color: #fafafa;\n  border: 1px solid #ccc;\n  border-top: 0;\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.drag-and-drop .default{\n  display: inline-block;\n}\n.manual-file-chooser {\n  position: absolute;\n  width: 240px;\n  padding: 5px;\n  margin-left: -80px;\n  cursor: pointer;\n  opacity: 0.0001;\n}\n.manual-file-chooser-text{\n  display: inline-block;\n  padding: 0;\n  font-size: inherit;\n  color: #4078c0;\n  white-space: nowrap;\n  cursor: pointer;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  background-color: transparent;\n  border: 0;\n  -webkit-appearance: none;\n  text-transform: none;\n}\n.manual-file-chooser-text:hover, \n.manual-file-chooser-text:focus {\n  text-decoration: underline;\n  outline: none;\n}\n.drag-and-drop .loading{\n  display: none;\n}\n", ""]);
+	exports.push([module.id, "\n*{\n  box-sizing: border-box;\n}\n.write-content {\n  position: relative;\n  width: 600px;\n  margin: 0 auto;\n}\n.write-content textarea {\n  width: 100%;\n  min-height: 200px;\n  max-height: 500px;\n  padding: 10px;\n  resize: vertical;\n  display: block;\n  border: 1px solid #ddd;\n  border-bottom: 1px dashed #ddd;\n  font-size: 14px;\n  line-height: 1.6;\n  background-color: #fafafa;\n  border-radius: 3px 3px 0 0;\n  outline: none;\n  box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);\n}\n.write-content textarea:focus{\n  background-color: #fff;\n  border-color: #51a7e8;\n  outline: none;\n  box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);\n}\n.write-content.focused .drag-and-drop{\n  border-color: #51a7e8;\n  box-shadow: rgba(81,167,232,0.5) 0 0 3px;\n}\n.dragoverd textarea, \n.dragoverd .drag-and-drop {\n    box-shadow: #c9ff00 0 0 3px;\n}\n.manual-file-chooser {\n  position: absolute;\n  width: 240px;\n  padding: 5px;\n  margin-left: -80px;\n  cursor: pointer;\n  opacity: 0.0001;\n}\n.manual-file-chooser-text{\n  display: inline-block;\n  padding: 0;\n  font-size: inherit;\n  color: #4078c0;\n  white-space: nowrap;\n  cursor: pointer;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  background-color: transparent;\n  border: 0;\n  -webkit-appearance: none;\n  text-transform: none;\n}\n.manual-file-chooser-text:hover, \n.manual-file-chooser-text:focus {\n  text-decoration: underline;\n  outline: none;\n}\n.drag-and-drop{\n  padding: 7px 10px;\n  margin: 0;\n  font-size: 13px;\n  line-height: 16px;\n  color: #767676;\n  background-color: #fafafa;\n  border: 1px solid #ccc;\n  border-top: 0;\n  border-bottom-right-radius: 3px;\n  border-bottom-left-radius: 3px;\n}\n.drag-and-drop .default{\n  display: inline-block;\n}\n.drag-and-drop .error{\n  color: #bd2c00;\n}\n", ""]);
 
 	// exports
 
@@ -10473,12 +10473,33 @@
 	      text: '',
 	      images: [],
 	      isFocus: false,
-	      isDrogover: false
+	      isDrogover: false,
+	      upStatus: 'default',
+	      errorText: '',
+	      percentText: 0
 	    };
 	  },
 
 	  filters: {},
-	  ready: function ready() {},
+	  ready: function ready() {
+	    var _this = this;
+
+	    this.$on('onFileError', function (file, msg) {
+	      _this.upStatus = 'error';
+	      _this.errorText = msg;
+	    });
+	    this.$on('beforeFileUpload', function () {
+	      _this.upStatus = 'loading';
+	    });
+	    this.$on('onFileProgress', function (msg) {
+	      _this.percentText = msg.percent;
+	      console.log(msg.percent);
+	    });
+	    this.$on('onFileUpload', function (file, msg) {
+	      _this.upStatus = 'default';
+	    });
+	  },
+
 	  methods: {
 	    handleTFocus: function handleTFocus(e) {
 	      this.isFocus = true;
@@ -10486,7 +10507,6 @@
 	    handleTBlur: function handleTBlur(e) {
 	      this.isFocus = false;
 	    },
-	    uploading: function uploading() {},
 	    uploadComplete: function uploadComplete(err, data) {
 	      if (err) {
 	        return;
@@ -10554,7 +10574,6 @@
 	      var _this = this;
 
 	      var hasImg = false;
-
 	      if (myFiles.length > 0) {
 	        Array.prototype.slice.call(myFiles, 0).map(function (file) {
 	          if (/^image/.test(file.type)) {
@@ -10580,6 +10599,8 @@
 	        this.$dispatch('onFileError', file, err);
 	        return;
 	      }
+
+	      xhr.upload.addEventListener('progress', this._onProgress, false);
 
 	      xhr.onreadystatechange = function () {
 	        if (xhr.readyState < 4) {
@@ -10615,6 +10636,10 @@
 	      }
 	      xhr.send(form);
 	      this.$dispatch('afterFileUpload', file);
+	    },
+	    _onProgress: function _onProgress(e) {
+	      e.percent = e.loaded / e.total * 100;
+	      this.$dispatch('onFileProgress', e);
 	    }
 	  }
 	};
@@ -10695,7 +10720,7 @@
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div id=\"app\">\n  <div class=\"write-content\"\n      @drop=\"handleDrag\"  \n      @dragover=\"handleDragover\"\n      @dragleave=\"handleDragleave\"\n      :class=\"{focused:isFocus, dragoverd: isDrogover}\">\n    <textarea \n      @paste=\"handleTPaste\" \n      @focus=\"handleTFocus\"\n      @blur=\"handleTBlur\"\n      v-model=\"text\"\n      placeholder=\"Write a comment or drag your files here...\"></textarea>  \n      <p class=\"drag-and-drop\">\n        <span class=\"default\">\n          Attach files by dragging &amp; dropping,\n          <input type=\"file\" multiple=\"multiple\" \n            class=\"manual-file-chooser js-manual-file-chooser\"\n            @click=\"fileInputClick\"\n            @change=\"fileInputChange\">\n          <button class=\"btn-link manual-file-chooser-text\">selecting them</button>, or pasting\n          from the clipboard.\n        </span>\n        <span class=\"loading\">\n          Uploading your files…\n        </span>\n      </p>\n  </div>\n  \n  <ul>\n    <li v-for=\"img in images\">\n      <img v-bind:src=\"img.url\">    \n    </li>\n  </ul>\n  \n</div>\n";
+	module.exports = "\n<div id=\"app\">\n  <div class=\"write-content\"\n      @drop=\"handleDrag\"  \n      @dragover=\"handleDragover\"\n      @dragleave=\"handleDragleave\"\n      :class=\"{focused:isFocus, dragoverd: isDrogover}\">\n    <textarea \n      @paste=\"handleTPaste\" \n      @focus=\"handleTFocus\"\n      @blur=\"handleTBlur\"\n      v-model=\"text\"\n      placeholder=\"Write a comment or drag your files here...\"></textarea>  \n      <p class=\"drag-and-drop\">\n        <span class=\"default\" v-show=\"upStatus === 'default'\">\n          Attach files by dragging &amp; dropping,\n          <input type=\"file\" multiple=\"multiple\" \n            class=\"manual-file-chooser js-manual-file-chooser\"\n            @click=\"fileInputClick\"\n            @change=\"fileInputChange\">\n          <button class=\"btn-link manual-file-chooser-text\">selecting them</button>, or pasting\n          from the clipboard.\n        </span>\n        <span class=\"loading\" v-show=\"upStatus === 'loading'\">\n          Uploading your files… {{percentText}}\n        </span>\n        <span class=\"error\" v-show=\"upStatus === 'error'\">\n          {{errorText}}\n        </span>\n      </p>\n  </div>\n  \n  <ul>\n    <li v-for=\"img in images\">\n      <img v-bind:src=\"img.url\">    \n    </li>\n  </ul>\n  \n</div>\n";
 
 /***/ }
 /******/ ]);

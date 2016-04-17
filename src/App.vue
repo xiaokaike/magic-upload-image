@@ -12,7 +12,7 @@
         v-model="text"
         placeholder="Write a comment or drag your files here..."></textarea>  
         <p class="drag-and-drop">
-          <span class="default">
+          <span class="default" v-show="upStatus === 'default'">
             Attach files by dragging &amp; dropping,
             <input type="file" multiple="multiple" 
               class="manual-file-chooser js-manual-file-chooser"
@@ -21,8 +21,11 @@
             <button class="btn-link manual-file-chooser-text">selecting them</button>, or pasting
             from the clipboard.
           </span>
-          <span class="loading">
-            Uploading your files…
+          <span class="loading" v-show="upStatus === 'loading'">
+            Uploading your files… {{percentText}}
+          </span>
+          <span class="error" v-show="upStatus === 'error'">
+            {{errorText}}
           </span>
         </p>
     </div>
@@ -49,12 +52,29 @@ export default {
       text: '',
       images: [],
       isFocus: false,
-      isDrogover: false
+      isDrogover: false,
+      upStatus: 'default',
+      errorText: '',
+      percentText: 0
     }
   },
   filters: {
   },
-  ready: function () {
+  ready () {
+    this.$on('onFileError', (file, msg) => {
+      this.upStatus = 'error'
+      this.errorText = msg
+    })
+    this.$on('beforeFileUpload', () => {
+      this.upStatus = 'loading'
+    })
+    this.$on('onFileProgress', (msg) => {
+      this.percentText = msg.percent
+      console.log(msg.percent)
+    })
+    this.$on('onFileUpload', (file, msg) => {
+      this.upStatus = 'default'
+    })
   },
   methods: {
     handleTFocus (e) {
@@ -62,9 +82,6 @@ export default {
     },
     handleTBlur (e) {
       this.isFocus = false
-    },
-    uploading () {
-
     },
     uploadComplete (err, data) {
       if (err) {
@@ -121,21 +138,6 @@ export default {
 .dragoverd .drag-and-drop {
     box-shadow: #c9ff00 0 0 3px;
 }
-.drag-and-drop{
-  padding: 7px 10px;
-  margin: 0;
-  font-size: 13px;
-  line-height: 16px;
-  color: #767676;
-  background-color: #fafafa;
-  border: 1px solid #ccc;
-  border-top: 0;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-.drag-and-drop .default{
-  display: inline-block;
-}
 .manual-file-chooser {
   position: absolute;
   width: 240px;
@@ -165,7 +167,22 @@ export default {
   text-decoration: underline;
   outline: none;
 }
-.drag-and-drop .loading{
-  display: none;
+.drag-and-drop{
+  padding: 7px 10px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 16px;
+  color: #767676;
+  background-color: #fafafa;
+  border: 1px solid #ccc;
+  border-top: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.drag-and-drop .default{
+  display: inline-block;
+}
+.drag-and-drop .error{
+  color: #bd2c00;
 }
 </style>

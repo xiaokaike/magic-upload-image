@@ -11,7 +11,6 @@ export default {
   methods: {
     fileUpload (myFiles) {
       var hasImg = false
-
       if (myFiles.length > 0) {
         // a hack to push all the Promises into a new array
         Array.prototype.slice.call(myFiles, 0).map((file) => {
@@ -42,7 +41,7 @@ export default {
         return
       }
 
-      // xhr.upload.addEventListener('progress', this._onProgress, false)
+      xhr.upload.addEventListener('progress', this._onProgress, false)
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState < 4) {
@@ -78,6 +77,11 @@ export default {
       }
       xhr.send(form)
       this.$dispatch('afterFileUpload', file)
+    },
+    _onProgress (e) {
+      // this is an internal call in XHR to update the progress
+      e.percent = (e.loaded / e.total) * 100
+      this.$dispatch('onFileProgress', e)
     }
   }
 }
