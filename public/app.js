@@ -10631,8 +10631,6 @@
 	exports.default = {
 	  methods: {
 	    handleTPaste: function handleTPaste(event) {
-	      var _this = this;
-
 	      var image;
 	      if (event.clipboardData && event.clipboardData.items) {
 	        image = isImage(event.clipboardData.items);
@@ -10640,9 +10638,7 @@
 	          event.preventDefault();
 	          var file = image.getAsFile();
 	          file.name = getFilename(event) || 'image-' + Date.now() + '.png';
-	          return this.fileUpload(file, function (err, data) {
-	            _this.uploadComplete(err, data);
-	          });
+	          return this.fileUpload([file]);
 	        }
 	      }
 	    }
@@ -10690,8 +10686,7 @@
 	    },
 	    fileInputChange: function fileInputChange(e) {
 	      var myFiles = e.target.files;
-
-	      console.log('fileInputChange', myFiles, e);
+	      this.fileUpload(myFiles);
 	    }
 	  }
 	};

@@ -9,9 +9,7 @@ export default {
           event.preventDefault()
           var file = image.getAsFile()
           file.name = getFilename(event) || 'image-' + Date.now() + '.png'
-          return this.fileUpload(file, (err, data) => {
-            this.uploadComplete(err, data)
-          })
+          return this.fileUpload([file])
         }
       }
     }
