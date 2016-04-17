@@ -22,12 +22,17 @@
             from the clipboard.
           </span>
           <span class="loading">
-            <img alt="" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16"> Uploading your files…
+            Uploading your files…
           </span>
         </p>
     </div>
     
-    <img v-bind:src="imageUrl">
+    <ul>
+      <li v-for="img in images">
+        <img v-bind:src="img.url">    
+      </li>
+    </ul>
+    
   </div>
 </template>
 
@@ -40,7 +45,7 @@ export default {
   data () {
     return {
       text: '',
-      imageUrl: '',
+      images: [],
       isFocus: false,
       isDrogover: false
     }
@@ -51,7 +56,6 @@ export default {
   },
   methods: {
     handleTPaste (event) {
-      var that = this
       var image
       var pasteEvent = event
       if (pasteEvent.clipboardData && pasteEvent.clipboardData.items) {
@@ -59,10 +63,9 @@ export default {
         if (image) {
           event.preventDefault()
           var file = image.getAsFile()
-          file.filename = getFilename(event) || 'image-' + Date.now() + '.png'
-          return this.fileUpload(file, function (err, data) {
-            console.log(err, data)
-            that.uploadComplete(data)
+          file.name = getFilename(event) || 'image-' + Date.now() + '.png'
+          return this.fileUpload(file, (err, data) => {
+            this.uploadComplete(err, data)
           })
         }
       }
@@ -73,8 +76,13 @@ export default {
     handleTBlur (e) {
       this.isFocus = false
     },
-    uploadComplete (data) {
-      this.imageUrl = data.url
+    uploadComplete (err, data) {
+      if (err) {
+        return
+      }
+      this.images.push({
+        url: data.url
+      })
       this.text += '![image]($src)'.replace('$src', data.url)
     },
     fileInputClick (e) {

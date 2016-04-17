@@ -11,7 +11,6 @@ export default {
   methods: {
     fileUpload (myFiles, callback) {
       return this._handleUpload(myFiles, function (err, data) {
-        console.log(err, data)
         callback(err, data)
       })
     },
@@ -22,7 +21,7 @@ export default {
       try {
         // form.append('Content-Type', file.type || 'application/octet-stream')
         // our request will have the file in the ['file'] key
-        form.append('file', file, file.filename)
+        form.append('file', file, file.name)
       } catch (err) {
         this.$dispatch('onFileError', file, err)
         return
