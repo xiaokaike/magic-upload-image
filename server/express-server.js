@@ -8,6 +8,10 @@ var express = require('express')
 var path = require('path')
 var multer = require('multer')
 var app = express()
+
+var APP_ID = process.env.LC_APP_ID
+var APP_KEY = process.env.LC_APP_KEY
+var MASTER_KEY = process.env.LC_APP_MASTER_KEY
 var PORT = parseInt(process.env.LC_APP_PORT || 3002)
 
 var upload = multer({ dest: 'uploads/' })
