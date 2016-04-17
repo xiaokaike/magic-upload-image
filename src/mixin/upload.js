@@ -9,10 +9,25 @@ export default {
     }
   },
   methods: {
-    fileUpload (myFiles, callback) {
-      return this._handleUpload(myFiles, function (err, data) {
-        callback(err, data)
-      })
+    fileUpload (myFiles) {
+      var hasImg = false
+
+      if (myFiles.length > 0) {
+        // a hack to push all the Promises into a new array
+        Array.prototype.slice.call(myFiles, 0).map((file) => {
+          if (/^image/.test(file.type)) {
+            hasImg = true
+            return this._handleUpload(file, (err, data) => {
+              this.uploadComplete(err, data)
+            })
+          }
+        })
+      } else {
+        // someone tried to upload without adding files
+        var err = new Error('No files to upload for this field')
+        this.$dispatch('onFileError', myFiles, err)
+      }
+      return hasImg
     },
     _handleUpload (file, callback) {
       var form = new win.FormData()

@@ -10511,21 +10511,8 @@
 	exports.default = {
 	  methods: {
 	    handleDrag: function handleDrag(e) {
-	      var _this = this;
-
 	      var fileList = e.dataTransfer.files;
-	      var hasImg = false;
-
-	      for (var key in fileList) {
-	        var file = fileList[key];
-	        if (/^image/.test(file.type)) {
-	          this.fileUpload(file, function (err, data) {
-	            _this.uploadComplete(err, data);
-	          });
-
-	          hasImg = true;
-	        }
-	      }
+	      var hasImg = this.fileUpload(fileList);
 	      if (hasImg) {
 	        this.isDrogover = false;
 	        e.preventDefault();
@@ -10563,10 +10550,25 @@
 	  },
 
 	  methods: {
-	    fileUpload: function fileUpload(myFiles, callback) {
-	      return this._handleUpload(myFiles, function (err, data) {
-	        callback(err, data);
-	      });
+	    fileUpload: function fileUpload(myFiles) {
+	      var _this = this;
+
+	      var hasImg = false;
+
+	      if (myFiles.length > 0) {
+	        Array.prototype.slice.call(myFiles, 0).map(function (file) {
+	          if (/^image/.test(file.type)) {
+	            hasImg = true;
+	            return _this._handleUpload(file, function (err, data) {
+	              _this.uploadComplete(err, data);
+	            });
+	          }
+	        });
+	      } else {
+	        var err = new Error('No files to upload for this field');
+	        this.$dispatch('onFileError', myFiles, err);
+	      }
+	      return hasImg;
 	    },
 	    _handleUpload: function _handleUpload(file, callback) {
 	      var form = new win.FormData();
