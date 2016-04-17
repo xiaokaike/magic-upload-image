@@ -6,7 +6,6 @@
 var fs = require('fs')
 var express = require('express')
 var path = require('path')
-var bodyParser = require('body-parser')
 var AV = require('leanengine')
 var app = express()
 var busboy = require('connect-busboy')
