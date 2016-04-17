@@ -18,6 +18,7 @@ var PORT = parseInt(process.env.LC_APP_PORT || 3002)
 AV.initialize(APP_ID, APP_KEY, MASTER_KEY);
 
 // 使用这个中间件
+app.use(AV.Cloud)
 app.use(busboy())
 app.use(express.static(path.join(__dirname, '../public/')))
 
