@@ -30,7 +30,7 @@ var upload = function *(next){
   
   while (part = yield parts) {
     var url = '/upload/' + part.filename
-    var stream = fs.createWriteStream(path.join(__dirname, '/public', url));
+    var stream = fs.createWriteStream(path.join(__dirname, '../public', url));
     part.pipe(stream);
     console.log('uploading %s -> %s', part.filename, stream.path);
   }
@@ -44,7 +44,7 @@ var upload = function *(next){
 
 // or use absolute paths
 app.use(koaJson())
-app.use(serve(__dirname + '/public/'))
+app.use(serve(path.join(__dirname, '../public/')))
 app.use(route.post('/upload', upload))
 
 

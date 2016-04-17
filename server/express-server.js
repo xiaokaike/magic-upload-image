@@ -5,12 +5,13 @@
  */
 var fs = require('fs')
 var express = require('express')
+var path = require('path')
 var multer = require('multer')
 var app = express()
-var PORT = parseInt(process.env.LC_APP_PORT || 3000)
+var PORT = parseInt(process.env.LC_APP_PORT || 3002)
 
 var upload = multer({ dest: 'uploads/' })
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, '../public/')))
 
 app.post('/upload', upload.array(), function (req, res) {
   var imageFile = req.file

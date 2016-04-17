@@ -5,6 +5,8 @@
   "author": "xiaokai <kexiaokai@gmail.com>",
   "private": true,
   "scripts": {
+    "koa": "node server/koa-server",
+    "express": "node server/express-server",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
     "test": "",
