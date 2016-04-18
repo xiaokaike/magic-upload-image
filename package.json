@@ -5,7 +5,7 @@
   "author": "xiaokai <kexiaokai@gmail.com>",
   "private": true,
   "scripts": {
-    "koa": "node server/koa-server",
+    "koa": "babel-node --presets es2015 server/koa-es6-server",
     "start": "node --harmony server/lean-server",
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
@@ -13,6 +13,8 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "babel-cli": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
     "babel-runtime": "^5.8.0",
     "co-busboy": "^1.3.1",
     "connect-busboy": "0.0.2",
