@@ -10102,7 +10102,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/App.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(13)
+	__vue_template__ = __webpack_require__(18)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -10448,19 +10448,23 @@
 	  value: true
 	});
 
-	var _dragDrop = __webpack_require__(9);
+	var _ImgList = __webpack_require__(9);
+
+	var _ImgList2 = _interopRequireDefault(_ImgList);
+
+	var _dragDrop = __webpack_require__(14);
 
 	var _dragDrop2 = _interopRequireDefault(_dragDrop);
 
-	var _upload = __webpack_require__(10);
+	var _upload = __webpack_require__(15);
 
 	var _upload2 = _interopRequireDefault(_upload);
 
-	var _patse = __webpack_require__(11);
+	var _patse = __webpack_require__(16);
 
 	var _patse2 = _interopRequireDefault(_patse);
 
-	var _form = __webpack_require__(12);
+	var _form = __webpack_require__(17);
 
 	var _form2 = _interopRequireDefault(_form);
 
@@ -10480,6 +10484,9 @@
 	    };
 	  },
 
+	  components: {
+	    imgList: _ImgList2.default
+	  },
 	  filters: {},
 	  ready: function ready() {
 	    var _this = this;
@@ -10521,6 +10528,98 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(10)
+	__vue_script__ = __webpack_require__(12)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/ImgList.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(13)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/xiaokai/xeme/pro/magic-upload-image/src/ImgList.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(11);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./ImgList.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./ImgList.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n.img-list {\n  margin: 10px auto;\n  padding: 0;\n  width: 600px;\n  overflow: hidden;\n}\n.img-item {\n  float: left;\n  margin: 0 10px 10px 0;\n  width: 112px;\n  height: 112px;\n  border: 1px solid #ccc;\n  padding: 3px;\n  border-radius: 3px;\n  overflow: hidden;\n}\n.img-item:nth-child(5n){\n  margin-right: 0px;\n}\n.img-item img{\n  width: 100%;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  props: {
+	    lists: {
+	      type: Array
+	    }
+	  }
+	};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<ul class=\"img-list\">\n  <li class=\"img-item\" v-for=\"img in lists\">\n    <img v-bind:src=\"img.url\">    \n  </li>\n</ul>\n";
+
+/***/ },
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10550,7 +10649,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10645,7 +10744,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10696,7 +10795,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -10717,10 +10816,10 @@
 	};
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div id=\"app\">\n  <div class=\"write-content\"\n      @drop=\"handleDrag\"  \n      @dragover=\"handleDragover\"\n      @dragleave=\"handleDragleave\"\n      :class=\"{focused:isFocus, dragoverd: isDrogover}\">\n    <textarea \n      @paste=\"handleTPaste\" \n      @focus=\"handleTFocus\"\n      @blur=\"handleTBlur\"\n      v-model=\"text\"\n      placeholder=\"Write a comment or drag your files here...\"></textarea>  \n      <p class=\"drag-and-drop\">\n        <span class=\"default\" v-show=\"upStatus === 'default'\">\n          Attach files by dragging &amp; dropping,\n          <input type=\"file\" multiple=\"multiple\" \n            class=\"manual-file-chooser js-manual-file-chooser\"\n            @click=\"fileInputClick\"\n            @change=\"fileInputChange\">\n          <button class=\"btn-link manual-file-chooser-text\">selecting them</button>, or pasting\n          from the clipboard.\n        </span>\n        <span class=\"loading\" v-show=\"upStatus === 'loading'\">\n          Uploading your files… {{percentText}}\n        </span>\n        <span class=\"error\" v-show=\"upStatus === 'error'\">\n          {{errorText}}\n        </span>\n      </p>\n  </div>\n  \n  <ul>\n    <li v-for=\"img in images\">\n      <img v-bind:src=\"img.url\">    \n    </li>\n  </ul>\n  \n</div>\n";
+	module.exports = "\n<div id=\"app\">\n  <div class=\"write-content\"\n      @drop=\"handleDrag\"  \n      @dragover=\"handleDragover\"\n      @dragleave=\"handleDragleave\"\n      :class=\"{focused:isFocus, dragoverd: isDrogover}\">\n    <textarea \n      @paste=\"handleTPaste\" \n      @focus=\"handleTFocus\"\n      @blur=\"handleTBlur\"\n      v-model=\"text\"\n      placeholder=\"Write a comment or drag your files here...\"></textarea>  \n      <p class=\"drag-and-drop\">\n        <span class=\"default\" v-show=\"upStatus === 'default'\">\n          Attach files by dragging &amp; dropping,\n          <input type=\"file\" multiple=\"multiple\" \n            class=\"manual-file-chooser js-manual-file-chooser\"\n            @click=\"fileInputClick\"\n            @change=\"fileInputChange\">\n          <button class=\"btn-link manual-file-chooser-text\">selecting them</button>, or pasting\n          from the clipboard.\n        </span>\n        <span class=\"loading\" v-show=\"upStatus === 'loading'\">\n          Uploading your files… {{percentText}}\n        </span>\n        <span class=\"error\" v-show=\"upStatus === 'error'\">\n          {{errorText}}\n        </span>\n      </p>\n  </div>\n  <img-list :lists=\"images\"></img-list>    \n</div>\n";
 
 /***/ }
 /******/ ]);

@@ -29,17 +29,12 @@
           </span>
         </p>
     </div>
-    
-    <ul>
-      <li v-for="img in images">
-        <img v-bind:src="img.url">    
-      </li>
-    </ul>
-    
+    <img-list :lists="images"></img-list>    
   </div>
 </template>
 
 <script>
+import imgList from './ImgList.vue'
 import mixinDragDrop from './mixin/drag-drop'
 import mixinUpload from './mixin/upload'
 import mixinPatse from './mixin/patse'
@@ -57,6 +52,9 @@ export default {
       errorText: '',
       percentText: 0
     }
+  },
+  components: {
+    imgList
   },
   filters: {
   },
