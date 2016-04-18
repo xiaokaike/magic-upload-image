@@ -6,11 +6,12 @@ module.exports = {
     index: path.resolve(__dirname, 'public/index.html'),
     assetsRoot: path.resolve(__dirname, 'public'),
     assetsSubDirectory: 'static',
+    uploadDirectory: 'upload',
     assetsPublicPath: '/',
     productionSourceMap: true
   },
   dev: {
-    port: 8080,
+    port: 3002,
     proxyTable: {}
   }
 }

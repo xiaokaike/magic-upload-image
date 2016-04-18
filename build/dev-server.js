@@ -42,6 +42,10 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(context, options))
 })
 
+// upload api
+app.use(require('connect-busboy')())
+app.use(require('../server/dev-upload'))
+
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
@@ -55,6 +59,7 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.build.assetsPublicPath, config.build.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+
 
 module.exports = app.listen(port, function (err) {
   if (err) {
