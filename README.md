@@ -1,6 +1,13 @@
-# magic-upload
+# magic-upload-image
 
-> magic-upload base on Vue.js
+> magic upload image base on Vue.js  Support paste, drag-drop, form
+
+
+## [demo](http://upload.leanapp.cn/) 
+
+![demo](./demo.gif)
+
+
 
 ## Build Setup
 
