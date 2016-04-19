@@ -9,7 +9,7 @@
 
 ## Demo地址: [demo](http://upload.leanapp.cn/) 
 
-![demo](./demo.gif)
+![demo](./demo1.gif)
 
 
 ## 实现方式
