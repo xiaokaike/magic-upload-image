@@ -1,8 +1,10 @@
+'use strict'
+
 /**
- * simple leancloud server for upload 
- *
- * @param
+ * simple leancloud server for upload
+ * upload file save in leancloud 
  */
+
 var fs = require('fs')
 var express = require('express')
 var path = require('path')

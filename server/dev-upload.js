@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 var fs = require('fs')
 var express = require('express')
@@ -9,7 +9,14 @@ var config = require('../config')
 var uploadPath = path.posix.join(
   config.build.assetsPublicPath, 
   config.build.assetsSubDirectory,
-  config.build.uploadDirectory)
+  config.build.uploadDirectory
+)
+
+/**
+ * 简单的upload api, 上传上来的图片保存到 uploadPath
+ *
+ * @param
+ */
 
 router.post('/upload', function(req, res) {
   if (req.busboy) {

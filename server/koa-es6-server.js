@@ -13,7 +13,6 @@ var app = koa()
 const PORT = process.env.PORT || 3002
 
 var upload = function * (next) {
-  // multipart upload
   var parts = coParse(this)
   var part
   
