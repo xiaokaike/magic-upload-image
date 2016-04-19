@@ -37,11 +37,11 @@
 import imgList from './ImgList.vue'
 import mixinDragDrop from './mixin/drag-drop'
 import mixinUpload from './mixin/upload'
-import mixinPatse from './mixin/patse'
+import mixinPaste from './mixin/paste'
 import mixinForm from './mixin/form'
 
 export default {
-  mixins: [mixinDragDrop, mixinUpload, mixinPatse, mixinForm],
+  mixins: [mixinDragDrop, mixinUpload, mixinPaste, mixinForm],
   data () {
     return {
       text: '',
