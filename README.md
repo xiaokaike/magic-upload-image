@@ -7,7 +7,7 @@
 - 拖拽上传
 - 选择图片
 
-## [demo](http://upload.leanapp.cn/) 
+## Demo地址: [demo](http://upload.leanapp.cn/) 
 
 ![demo](./demo.gif)
 
@@ -15,9 +15,9 @@
 ## 实现方式
 
 ### 浏览器
-- 截图黏贴上传使用 `onPaste` 
-- 拖拽上传 `onDrop` `onDrag`
-- 选择图片 from 表单
+- 截图黏贴上传使用 `paste` 事件, 浏览器的支持度：[caniuse](http://caniuse.com/#search=paste)
+- 拖拽上传 `drop` `drag` 事件
+- 选择图片 from 表单 `change` 事件
 
 ### 服务端 node
 
@@ -39,13 +39,21 @@ npm run dev
 # build for production with minification
 npm run build
 
+# run koa server
+npm run koa
+```
+
+### 发布到leancloud
+
+``` bash
+
 # publish to leancloud
 npm install -g leancloud-code
+
+npm run build
 
 lean add <app> <app-id>
 
 lean deploy
 
-# run koa server
-npm run koa
 ```
