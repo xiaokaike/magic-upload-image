@@ -22,7 +22,7 @@
             from the clipboard.
           </span>
           <span class="loading" v-show="upStatus === 'loading'">
-            Uploading your files… {{percentText}}
+            Uploading your files… <strong>{{percentText}}%</strong>
           </span>
           <span class="error" v-show="upStatus === 'error'">
             {{errorText}}
@@ -67,8 +67,7 @@ export default {
       this.upStatus = 'loading'
     })
     this.$on('onFileProgress', (msg) => {
-      this.percentText = msg.percent
-      console.log(msg.percent)
+      this.percentText = parseInt(msg.percent)
     })
     this.$on('onFileUpload', (file, msg) => {
       this.upStatus = 'default'
