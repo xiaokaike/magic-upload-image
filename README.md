@@ -15,7 +15,7 @@
 ## 实现方式
 
 ### 浏览器
-- 截图黏贴上传使用 `paste` 事件, 浏览器的支持度：[caniuse](http://caniuse.com/#search=paste)
+- 截图黏贴上传使用 `paste` 事件, 浏览器的支持度：[caniuse paste](http://caniuse.com/#search=paste)
 - 拖拽上传 `drop` `drag` 事件
 - 选择图片 from 表单 `change` 事件
 
@@ -24,6 +24,7 @@
 - `dev-upload.js` 基于 `express` 写的开发用的图片上传服务，图片保存在本地，启动方式 `npm run dev`
 - `koa-es6-server.js` 基于 [koa](http://koajs.com) `es6` 写的图片上传服务，图片保存在本地， 启动方式 `npm run koa`
 - `lean-server.js` 基于 `express` 写的 [leancloud](https://leancloud.cn/) node服务器，图片上传后保存在leancloud
+  [leancloud-code 文档](https://leancloud.cn/docs/leanengine_cli.html)
 
 
 
@@ -47,13 +48,17 @@ npm run koa
 
 ``` bash
 
-# publish to leancloud
+# 安装lean工具
 npm install -g leancloud-code
 
 npm run build
 
 lean add <app> <app-id>
 
+# 发布测试
 lean deploy
+
+# 发布正式
+lean publish
 
 ```
