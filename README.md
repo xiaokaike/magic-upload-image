@@ -1,6 +1,7 @@
 # magic-upload-image
 
-> 基于Vue.js 模拟Github issues 的图片上传组件
+> 基于Vue.js **1.0** 模拟Github issues 的图片上传组件
+
 
 ## 支持图片上传方式
 - 截图黏贴上传
